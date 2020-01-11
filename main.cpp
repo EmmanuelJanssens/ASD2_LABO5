@@ -51,9 +51,8 @@ int main()
     DictionaryStl dictionary;
     dictionary.load_dictionary(filename);
 
-    SpellChecker<DictionaryStl> test("data/input_sh",dictionary,"txt");
+    SpellChecker<DictionaryStl> test("data/input_lates",dictionary,"txt");
 
-    test.readFile();
 
     test.correct();
 

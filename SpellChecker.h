@@ -63,36 +63,79 @@ class SpellChecker
     }
 
 
-    bool isTypo(const std::string& dic, const std::string& text)
+    std::vector<std::string> missOneLetter(const std::string& text)
     {
-        return missOneLetter(dic,text) || oneLetterTooMuch(dic,text)||switchedLetters(dic,text)||oneWrongLetter(dic,text);
+        std::vector<std::string>variants;
+        std::string back = text;
+        if(text.length() > 1)
+        {
+            for(int i = 0; i < back.length(); i++)
+            {
+                back.erase((back.begin()+i));
+                if(*back.begin() != '\'')
+                    variants.push_back(back);
+                back = text;
+            }
+        }
+
+        return variants;
     }
 
-    bool missOneLetter(const std::string& dic, const std::string& text)
+    std::vector<std::string> oneLetterTooMuch(const std::string& text)
     {
+        std::vector<std::string>variants;
+        std::string back = text;
 
-        
-        return false;
+        for(int i = 0; i < back.length(); i++)
+        {
+            back.insert(back.begin()+i,'a');
+            for(char j = 'a'; j <= 'z' ; j++)
+            {
+                back.replace(back.begin()+i,back.begin()+i+1,1,j);
+                variants.push_back(back);
+            }
+            back = text;
+        }
+        return variants;
+    }
+    std::vector<std::string> switchedLetters( const std::string& text)
+    {
+        std::vector<std::string>variants;
+        std::string back = text;
+
+        if(text.length() > 1)
+        {
+            for(int i = 0; i < back.length(); i++)
+            {
+                if(i+1 < back.length())
+                {
+                    std::swap(back[i],back[i+1]);
+                    if(*back.begin() != '\'')
+                        variants.push_back(back); 
+                    back = text;
+                }
+            }
+        }
+         return variants;
+    }
+    std::vector<std::string> oneWrongLetter( const std::string& text)
+    {
+        std::vector<std::string>variants;
+        std::string back = text;
+        for(int i = 0; i < back.length(); i++)
+        {
+            for(char j = 'a'; j <= 'z' ; j++)
+            {
+                back.replace(back.begin()+i,back.begin()+i+1,1,j);
+                variants.push_back(back);
+                back = text;
+
+            }
+        }
+
+        return variants;
     }
 
-    bool oneLetterTooMuch(const std::string& dic, const std::string& text)
-    {
-        return false;
-    }
-    bool switchedLetters(const std::string& dic, const std::string& text)
-    {
-        return false;
-    }
-    bool oneWrongLetter(const std::string& dic, const std::string& text)
-    {
-        return false;
-    }
-
-
-    void findSimilarWords(const std::string& word)
-    {
-
-    }
     void correct()
     {
         std::ofstream file;
@@ -100,6 +143,7 @@ class SpellChecker
         std::string correction = this->filename + "_correction.txt";
         file.open(correction);
         std::chrono::high_resolution_clock::time_point t1 =  std::chrono::high_resolution_clock::now();
+
         readFile();
         for(int i = 0; i  < words->size(); i++)
         {
@@ -110,10 +154,39 @@ class SpellChecker
                     if(!dictionary.findWord((*words)[i]))
                     {
                         file<<"*"<<(*words)[i]<<std::endl;
-                    }
-                    else
-                    {
                         //generer et rechercher les variantes possibles
+                        std::vector<std::string>  variants = missOneLetter((*words)[i]);
+                        for(int i = 0; i <variants.size(); i++)
+                        {
+                            if(dictionary.findWord(variants[i]))
+                            {
+                                file<<"1"<<":"<<variants[i]<<std::endl;
+                            }                           
+                        }
+                        variants = oneLetterTooMuch((*words)[i]);
+                        for(int i = 0; i <variants.size(); i++)
+                        {
+                            if(dictionary.findWord(variants[i]))
+                            {
+                                file<<"2"<<":"<<variants[i]<<std::endl;
+                            }                           
+                        }
+                        variants  = oneWrongLetter((*words)[i]);
+                        for(int i = 0; i <variants.size(); i++)
+                        {
+                            if(dictionary.findWord(variants[i]))
+                            {
+                                file<<"3"<<":"<<variants[i]<<std::endl;
+                            }                           
+                        }
+                        variants  = switchedLetters((*words)[i]);
+                        for(int i = 0; i <variants.size(); i++)
+                        {
+                            if(dictionary.findWord(variants[i]))
+                            {
+                                file<<"4"<<":"<<variants[i]<<std::endl;
+                            }                           
+                        }
                     }
                     
                 }
