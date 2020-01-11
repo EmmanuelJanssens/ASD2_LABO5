@@ -24,8 +24,8 @@ bool DictionaryStl::findWord(const string& word)
 {
     //look in coorect map
     //return find(_data[word[0]]->begin(),_data[word[0]]->end(),word) != _data[word[0]]->end();
-
-    
+    if(wordHasDigits(word))
+        return false;
     return dichotomicSearch(word,0,_data[word[0]]->size()-1);
 }
 
@@ -59,7 +59,9 @@ void DictionaryStl::load_dictionary(string filename)
         
         while(getline(file,word))
         {
-            formatWord(word);
+
+            //formatWord(word);
+            transform(word.begin(),word.end(),word.begin(),[](unsigned char c){return tolower(c);});
             _data[word[0]]->push_back(word);
         }
     }

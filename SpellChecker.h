@@ -5,7 +5,7 @@
 #include <fstream>
 #include <iostream>
 #include <chrono>
-
+#include <sstream>
 /// T must implement find function
 template <class T>
 class SpellChecker
@@ -46,7 +46,13 @@ class SpellChecker
             while(file >> word)
             {
                 formatWord(word);
-                words->push_back(word);
+                std::stringstream ss(word);
+                std::string str;
+                while(ss>>str)
+                {
+                    removeApostrophe(str);
+                    words->push_back(str);
+                }
             }
         }
         else
@@ -99,10 +105,19 @@ class SpellChecker
         {
             if((*words)[i] != "")
             {
-                if(!dictionary.findWord((*words)[i]))
+                if(!wordHasDigits((*words)[i]))
                 {
-                    file<<"*"<<(*words)[i]<<std::endl;
+                    if(!dictionary.findWord((*words)[i]))
+                    {
+                        file<<"*"<<(*words)[i]<<std::endl;
+                    }
+                    else
+                    {
+                        //generer et rechercher les variantes possibles
+                    }
+                    
                 }
+
             }            
         }
 
