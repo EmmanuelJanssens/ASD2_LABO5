@@ -1,7 +1,8 @@
 #ifndef SPELLCHECKER
 #define SPELLCHECKER
 
-#include "utils.h"
+#include "Dictionary.h"
+
 #include <fstream>
 #include <iostream>
 #include <chrono>
@@ -13,36 +14,42 @@ class SpellChecker
     private:
 
 
-    T dictionary;  
-    std::string filename;
+    T data;
+    Dictionary<T> *dictionary;
+    std::string output_file;
     std::string extension;
 
     std::vector<std::string>* words;
 
     public:
 
-    SpellChecker(const std::string& filename, const T& dict, const std::string& extension)
+    SpellChecker(const std::string& dictionary, const std::string& output, const std::string& extension)
     {
-        this->filename = filename;
+        this->output_file = output;
         this->extension = extension;
 
         words = new std::vector<std::string>();
-        dictionary = dict;
+        this->dictionary = new Dictionary<T>(dictionary);
     }
     ~SpellChecker()
     {
         delete words;
+        delete dictionary;
     }
-
+    
+    void load_dictrionary()
+    {
+        dictionary->load();
+    }    
+    
     void readFile()
     {
         std::ifstream file;
         std::string word;
 
-        file.open(filename +"."+extension);
+        file.open(output_file +"."+extension);
         if(file.is_open())
-        {
-            
+        {         
             while(file >> word)
             {
                 formatWord(word);
@@ -57,7 +64,7 @@ class SpellChecker
         }
         else
         {
-            std::cout<<"could not open file "<<filename<<std::endl;
+            std::cout<<"could not open file "<<output_file<<std::endl;
         }
         file.close();
     }
@@ -140,7 +147,7 @@ class SpellChecker
     {
         std::ofstream file;
 
-        std::string correction = this->filename + "_correction.txt";
+        std::string correction = this->output_file + "_correction.txt";
         file.open(correction);
         std::chrono::high_resolution_clock::time_point t1 =  std::chrono::high_resolution_clock::now();
 
@@ -151,14 +158,14 @@ class SpellChecker
             {
                 if(!wordHasDigits((*words)[i]))
                 {
-                    if(!dictionary.findWord((*words)[i]))
+                    if(!dictionary->find((*words)[i]))
                     {
                         file<<"*"<<(*words)[i]<<std::endl;
                         //generer et rechercher les variantes possibles
                         std::vector<std::string>  variants = missOneLetter((*words)[i]);
                         for(int i = 0; i <variants.size(); i++)
                         {
-                            if(dictionary.findWord(variants[i]))
+                            if(dictionary->find(variants[i]))
                             {
                                 file<<"1"<<":"<<variants[i]<<std::endl;
                             }                           
@@ -166,7 +173,7 @@ class SpellChecker
                         variants = oneLetterTooMuch((*words)[i]);
                         for(int i = 0; i <variants.size(); i++)
                         {
-                            if(dictionary.findWord(variants[i]))
+                            if(dictionary->find(variants[i]))
                             {
                                 file<<"2"<<":"<<variants[i]<<std::endl;
                             }                           
@@ -174,7 +181,7 @@ class SpellChecker
                         variants  = oneWrongLetter((*words)[i]);
                         for(int i = 0; i <variants.size(); i++)
                         {
-                            if(dictionary.findWord(variants[i]))
+                            if(dictionary->find(variants[i]))
                             {
                                 file<<"3"<<":"<<variants[i]<<std::endl;
                             }                           
@@ -182,7 +189,7 @@ class SpellChecker
                         variants  = switchedLetters((*words)[i]);
                         for(int i = 0; i <variants.size(); i++)
                         {
-                            if(dictionary.findWord(variants[i]))
+                            if(dictionary->find(variants[i]))
                             {
                                 file<<"4"<<":"<<variants[i]<<std::endl;
                             }                           

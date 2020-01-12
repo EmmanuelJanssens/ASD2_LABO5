@@ -490,6 +490,7 @@
 2:sosie
 2:sotie
 3:joie
+3:zoie
 3:spie
 3:stie
 3:soce
@@ -677,6 +678,7 @@
 3:doobies
 3:doodies
 3:doolies
+3:doozies
 *hatherley
 *caraffe
 1:carafe
@@ -762,6 +764,7 @@
 2:fosie
 2:foxie
 3:joie
+3:zoie
 3:foge
 3:fole
 3:fone

@@ -40,20 +40,17 @@
 
 
 
-#include "DictionaryStl.h"
+#include "StlDataStruct.h"
 #include "SpellChecker.h"
-
+#include "Dictionary.h"
 using namespace std;
 int main()
 {
-   string filename = "data/dictionary.txt";
-
-    DictionaryStl dictionary;
-    dictionary.load_dictionary(filename);
-
-    SpellChecker<DictionaryStl> test("data/input_lates",dictionary,"txt");
 
 
+    SpellChecker<StlDataStruct> test("data/dictionary.txt","data/input_lates","txt");
+
+    test.load_dictrionary();
     test.correct();
 
     return 0;
