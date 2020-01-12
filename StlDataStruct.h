@@ -3,36 +3,96 @@
 
 #include "interface.h"
 
+#include <chrono>
 
 
-class StlDataStruct :  data_interface
+template<class keyType, class valueType>
+class StlDataStruct :  data_interface<keyType,valueType>
 {
     private:
 
-    std::map<char,std::vector<std::string>*> _data;
+    std::map<keyType,std::vector<valueType>*> _data;
 
-    bool find(const std::string& word,int left, int right);
+   /**
+     * Recherche dicotomique
+     * */
+    bool find(valueType word,int left, int right)
+    {
+        while (left <= right) { 
+        int mid = left + (right - left) / 2; 
+  
+        if (_data[word[0]]->at(mid) == word) 
+            return true; 
+  
+        if (_data[word[0]]->at(mid)  < word) 
+            left = mid + 1; 
+          else
+            right = mid - 1; 
+        } 
+        return false; 
+    }
 
     public:
 
-    StlDataStruct();
-    ~StlDataStruct();
+    StlDataStruct()
+    {
+        for(int i = 0; i < strlen(ALPHA); i++ )
+        {
+            _data[ALPHA[i]] = new std::vector<valueType>();
+        }
+    }
+    ~StlDataStruct()
+    {
+        for(int i  = 0 ; i < strlen(ALPHA); i++)
+        {
+            delete _data[ALPHA[i]];
+        }
+    }
 
+    public:
+    void put(const keyType& key, const valueType& value)
+    {
+        _data[key]->push_back(value);
+    }
     /*
         reads a file and put data into our datastructure
         as a heap form
     */
-    void insert(const std::string& filename) override;
+   void put(const valueType& value)
+   {
+       put(value[0],value);
+   }
 
-    /**
-     * Recherche dicotomique
-     * */
-    bool find(const std::string& word) override;
+ 
+    bool get(const keyType& key, const valueType& value) override
+    {
+        //look in coorect map
+        if(wordHasDigits(value))
+            return false;
+        return find(value,0,_data[key]->size()-1);
+    }
+    bool get( const valueType& value) override
+    {
+        //look in coorect map
+        return get(value[0],value);
+    }
 
-    
-    void remove(const std::string& word) override;
+    void remove(const keyType& key, const valueType& value) override
+    {
 
-    void sort() override;
+    }
+    void remove(const valueType& value) override
+    {
+
+    }
+    void sort() override
+    {
+        for(int i = 0; i < strlen(ALPHA); i++ )
+        {
+            make_heap(_data[ALPHA[i]]->begin(),_data[ALPHA[i]]->end());
+            sort_heap(_data[ALPHA[i]]->begin(),_data[ALPHA[i]]->end());
+        }
+    }
 };
 
 #endif

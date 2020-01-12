@@ -120,7 +120,7 @@ public:
         }
         return false;
     }
-    
+    void sort(){}
     //
     // idem précédent, mais sans retour de la valeur
     //

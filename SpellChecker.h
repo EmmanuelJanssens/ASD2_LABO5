@@ -143,6 +143,15 @@ class SpellChecker
         return variants;
     }
 
+    void testDic(std::string word)
+    {
+        if(dictionary->find(word))
+            std::cout<<word<<std::endl;
+    }
+    std::string getWord(int i)
+    {
+        return (*words)[i];
+    }
     void correct()
     {
         std::ofstream file;
@@ -154,15 +163,17 @@ class SpellChecker
         readFile();
         for(int i = 0; i  < words->size(); i++)
         {
-            if((*words)[i] != "")
+            if(getWord(i) != "")
             {
-                if(!wordHasDigits((*words)[i]))
+                if(!wordHasDigits(getWord(i)))
                 {
-                    if(!dictionary->find((*words)[i]))
+                    if(!dictionary->find(getWord(i)))
                     {
-                        file<<"*"<<(*words)[i]<<std::endl;
+                        //std::cout<<"*"<<getWord(i)<<std::endl;
+
+                        file<<"*"<<getWord(i)<<std::endl;
                         //generer et rechercher les variantes possibles
-                        std::vector<std::string>  variants = missOneLetter((*words)[i]);
+                        std::vector<std::string>  variants = missOneLetter(getWord(i));
                         for(int i = 0; i <variants.size(); i++)
                         {
                             if(dictionary->find(variants[i]))
@@ -170,7 +181,7 @@ class SpellChecker
                                 file<<"1"<<":"<<variants[i]<<std::endl;
                             }                           
                         }
-                        variants = oneLetterTooMuch((*words)[i]);
+                        variants = oneLetterTooMuch(getWord(i));
                         for(int i = 0; i <variants.size(); i++)
                         {
                             if(dictionary->find(variants[i]))
@@ -178,7 +189,7 @@ class SpellChecker
                                 file<<"2"<<":"<<variants[i]<<std::endl;
                             }                           
                         }
-                        variants  = oneWrongLetter((*words)[i]);
+                        variants  = oneWrongLetter(getWord(i));
                         for(int i = 0; i <variants.size(); i++)
                         {
                             if(dictionary->find(variants[i]))
@@ -186,7 +197,7 @@ class SpellChecker
                                 file<<"3"<<":"<<variants[i]<<std::endl;
                             }                           
                         }
-                        variants  = switchedLetters((*words)[i]);
+                        variants  = switchedLetters(getWord(i));
                         for(int i = 0; i <variants.size(); i++)
                         {
                             if(dictionary->find(variants[i]))

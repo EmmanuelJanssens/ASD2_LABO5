@@ -125,6 +125,8 @@ public:
         root = put(root,key,value);
     }
     
+    void sort(){}
+  
 private:
     Node* put(Node* x, const KeyType& key, const ValueType& value) {
         if (x==nullptr)
@@ -174,6 +176,7 @@ private:
     //
 public:
     bool get( const KeyType& key, ValueType& value ) {
+
         Node* x = root;
         while ( x != nullptr ) {
             if ( key < x->key )
@@ -182,6 +185,8 @@ public:
                 x = x->right;
             else // x->key == key.
             {
+                std::cout<<key<<" "<<x->value<<std::endl;
+
                 value = x->value;
                 return true;
             }

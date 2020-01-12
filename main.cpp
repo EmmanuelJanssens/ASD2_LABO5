@@ -43,15 +43,21 @@
 #include "StlDataStruct.h"
 #include "SpellChecker.h"
 #include "Dictionary.h"
+#include "AVLTree.h"
+#include "BinarySearchTree.h"
 using namespace std;
 int main()
 {
 
-
-    SpellChecker<StlDataStruct> test("data/dictionary.txt","data/input_lates","txt");
+   SpellChecker<StlDataStruct<char,string>> test("data/dictionary.txt","data/input_sh","txt");
 
     test.load_dictrionary();
     test.correct();
+
+    
+
+
+
 
     return 0;
 

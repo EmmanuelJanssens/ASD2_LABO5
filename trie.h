@@ -8,20 +8,21 @@ struct Node
     bool end;
 };
 
-class Trie : data_interface
+template<class keyType, class valueType>
+class Trie : data_interface<keyType,valueType>
 {
         Node* _root;
 
     public:
 
-        Trie();
-        ~Trie();
+        Trie(){}
+        ~Trie(){}
         
 
-        void insert(const std::string& word) override;
-        void remove(const std::string& word) override;
+        void insert(const std::string& word) override{}
+        void remove(const std::string& word) override{}
 
-        bool find(const std::string& word) override;
+        bool find(const std::string& word) override{return false;}
 };
 
 

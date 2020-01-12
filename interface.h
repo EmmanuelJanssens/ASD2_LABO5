@@ -8,15 +8,21 @@
 
 
 #include "utils.h"
+
+template <class keyType, class valueType>
 class data_interface
 {
+
+    protected:
+    virtual bool get(const keyType& key,const valueType& word){return false;}
+    virtual void put(const keyType& key,const valueType& word){}
+    virtual void remove(const keyType& key,const valueType& word){}
+    virtual void sort(){}
+
     public:
-
-    virtual bool find(const std::string& word);
-    virtual void insert(const std::string& word);
-    virtual void remove(const std::string& word);
-
-    virtual void sort();
+    virtual bool get(const valueType& word){return false;}
+    virtual void put(const valueType& word){}
+    virtual void remove(const valueType& word){}
 
 };
 #endif // INTERFACE_H

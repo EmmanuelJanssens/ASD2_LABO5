@@ -43,7 +43,7 @@ class Dictionary
 
                     //formatWord(word);
                     transform(word.begin(),word.end(),word.begin(),[](unsigned char c){return tolower(c);});
-                    data->insert(word);
+                    data->put(word[0],word);
                 }
             }
             else
@@ -53,7 +53,7 @@ class Dictionary
             file.close();
 
             data->sort();
-            
+
             std::chrono::high_resolution_clock::time_point t2 =  std::chrono::high_resolution_clock::now();
             std::chrono::duration<double> time_span  = std::chrono::duration_cast<std::chrono::duration<double>>(t2-t1);
             std::cout<<"Loading the dictionary took "<<time_span.count()<<" seconds"<<std::endl; 
@@ -61,9 +61,9 @@ class Dictionary
 
 
         
-        bool find(const std::string& word)
+        bool find(  std::string word)
         {
-            return data->find(word);
+            return data->get(word[0],word);
         }
 };
 #endif // DICTIONARY
