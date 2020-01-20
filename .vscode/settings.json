@@ -46,6 +46,13 @@
         "xmemory": "cpp",
         "xstddef": "cpp",
         "xtr1common": "cpp",
-        "xutility": "cpp"
+        "xutility": "cpp",
+        "bitset": "cpp",
+        "functional": "cpp",
+        "hash_map": "cpp",
+        "list": "cpp",
+        "unordered_map": "cpp",
+        "xhash": "cpp",
+        "unordered_set": "cpp"
     }
 }

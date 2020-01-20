@@ -94,6 +94,7 @@ public:
     // Destructeur.
     //
 public:
+
     ~AVLTree() {
         deleteSubTree( root );
     }
@@ -125,7 +126,6 @@ public:
         root = put(root,key,value);
     }
     
-    void sort(){}
   
 private:
     Node* put(Node* x, const KeyType& key, const ValueType& value) {
