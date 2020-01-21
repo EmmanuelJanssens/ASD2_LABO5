@@ -7,6 +7,7 @@
 #include <iostream>
 #include <chrono>
 #include <sstream>
+#include <vector>
 /// T must implement find function
 template <class T>
 class SpellChecker
@@ -14,7 +15,6 @@ class SpellChecker
     private:
 
 
-    T data;
     Dictionary<T> *dictionary;
     std::string output_file;
     std::string extension;
@@ -143,11 +143,6 @@ class SpellChecker
         return variants;
     }
 
-    void testDic(std::string word)
-    {
-        if(dictionary->find(word))
-            std::cout<<word<<std::endl;
-    }
     std::string getWord(int i)
     {
         return (*words)[i];

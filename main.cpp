@@ -45,20 +45,41 @@
 #include "Dictionary.h"
 #include "AVLTree.h"
 #include "BinarySearchTree.h"
+
+#include <unordered_set>
 using namespace std;
+
+#include "trie.h"
+
+struct Hash
+{
+    size_t operator() (const std::string& word) const
+    {
+        int z = 33;
+        int hashval = 0;
+        for(int i = 0; i < word.length(); i++)
+        {
+            hashval += z * hashval + std::hash<char>()(word[i]);
+        }
+        return hashval;
+    }
+};
+
 int main()
 {
 
-   SpellChecker<StlDataStruct<char,string>> test("data/dictionary.txt","data/input_sh","txt");
+
+    SpellChecker<StlDataStruct<unordered_set<string,Hash>,string>> test("data/dictionary.txt","data/input_sh","txt");
 
     test.load_dictrionary();
     test.correct();
 
-    
+    /*SpellChecker<Trie<string>> spell("data/dictionary.txt","data/input_sh","txt");
 
+    spell.load_dictrionary();
 
-
-
+    spell.correct();*/
+   
     return 0;
 
 }

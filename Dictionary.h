@@ -11,18 +11,18 @@ class Dictionary
 {
     private:
 
-        T* data;
+        T* data_structure;
         std::string filename;
     public:
         Dictionary(const std::string& filename)
         {
-            data = new T();
+            data_structure = new T();
             this->filename = filename;
         }
 
         ~Dictionary()
         {
-            delete data;
+            delete data_structure;
         }
 
         void load()
@@ -43,7 +43,7 @@ class Dictionary
 
                     //formatWord(word);
                     transform(word.begin(),word.end(),word.begin(),[](unsigned char c){return tolower(c);});
-                    data->put(word[0],word);
+                    data_structure->put(word);
                 }
             }
             else
@@ -52,7 +52,6 @@ class Dictionary
             }
             file.close();
 
-            data->sort();
 
             std::chrono::high_resolution_clock::time_point t2 =  std::chrono::high_resolution_clock::now();
             std::chrono::duration<double> time_span  = std::chrono::duration_cast<std::chrono::duration<double>>(t2-t1);
@@ -63,7 +62,7 @@ class Dictionary
         
         bool find(  std::string word)
         {
-            return data->get(word[0],word);
+            return data_structure->get(word);
         }
 };
 #endif // DICTIONARY
