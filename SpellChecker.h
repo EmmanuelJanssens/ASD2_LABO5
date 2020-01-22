@@ -1,3 +1,7 @@
+/**
+ * Auteurs: Teo Ferrari, Emmanuel Janssens et Mathias Maillard
+ */
+
 #ifndef SPELLCHECKER
 #define SPELLCHECKER
 
@@ -8,21 +12,31 @@
 #include <chrono>
 #include <sstream>
 #include <vector>
-/// T must implement find function
+
+/**
+ * Classe représentant le correcteur orthograpique.
+ * Le correcteur a besoin d'un dictionnaire ainsi que d'une liste de mots à corriger
+ */
+
 template <class T>
 class SpellChecker
 {
     private:
 
-
+    //Dictionnaire contenant les mots orthographiés correctement
     Dictionary<T> *dictionary;
+    //Nom du fichier à corriger
     std::string output_file;
+    //Extension du fichier
     std::string extension;
-
+    //Liste des mots dont on veut vérifier l'orthographe
     std::vector<std::string>* words;
 
     public:
 
+    /**
+     * Constructeur
+     */
     SpellChecker(const std::string& dictionary, const std::string& output, const std::string& extension)
     {
         this->output_file = output;
@@ -31,17 +45,28 @@ class SpellChecker
         words = new std::vector<std::string>();
         this->dictionary = new Dictionary<T>(dictionary);
     }
+
+    /**
+     * Destructeur
+     */
     ~SpellChecker()
     {
         delete words;
         delete dictionary;
     }
-    
+
+    /**
+     * Méthode permettant d'initialiser le dictionnaire
+     */
     void load_dictrionary()
     {
         dictionary->load();
     }    
-    
+
+    /**
+     * Méthode permettant de lire le fichier à corriger et d'appliquer les différents formatages avant de pouvoir
+     * vérifier la correction. Les mots à corriger sont enregistrés dans la structure words
+     */
     void readFile()
     {
         std::ifstream file;
@@ -70,6 +95,9 @@ class SpellChecker
     }
 
 
+    /**
+     * Retourne les variantes possibles d'un mot en partant du principe qu'il manque une lettre
+     */
     std::vector<std::string> missOneLetter(const std::string& text)
     {
         std::vector<std::string>variants;
@@ -88,6 +116,9 @@ class SpellChecker
         return variants;
     }
 
+    /**
+     * Retourne les variantes possibles d'un mot en partant du principe qu'il y a une lettre en trop
+     */
     std::vector<std::string> oneLetterTooMuch(const std::string& text)
     {
         std::vector<std::string>variants;
@@ -105,6 +136,10 @@ class SpellChecker
         }
         return variants;
     }
+
+    /**
+     * Retourne les variantes possibles d'un mot en partant du principe que deux lettres ont été inversées
+     */
     std::vector<std::string> switchedLetters( const std::string& text)
     {
         std::vector<std::string>variants;
@@ -125,6 +160,10 @@ class SpellChecker
         }
          return variants;
     }
+
+    /**
+     * Retourne les variantes possibles d'un mot en partant du principe qu'une lettre est erronée
+     */
     std::vector<std::string> oneWrongLetter( const std::string& text)
     {
         std::vector<std::string>variants;
@@ -143,31 +182,44 @@ class SpellChecker
         return variants;
     }
 
+    /**
+     * Retourne le mot à vérifier à l'indexe i
+     */
     std::string getWord(int i)
     {
         return (*words)[i];
     }
+
+    /**
+     * Méthode permettant d'appliquer la correction sur le fichier d'entrée. Les prépositions de corrections seront
+     * enregistrées dans un un autre fichier de la façon dont il nous a été demandé de faire dans la consigne
+     */
     void correct()
     {
         std::ofstream file;
 
+        //Fichier qui contiendra les variantes de correction
         std::string correction = this->output_file + "_correction.txt";
         file.open(correction);
+
+        //Démarage du timer
         std::chrono::high_resolution_clock::time_point t1 =  std::chrono::high_resolution_clock::now();
 
         readFile();
+
+        //Itère sur chaque mots pour vérifier l'orthographe
         for(int i = 0; i  < words->size(); i++)
         {
             if(getWord(i) != "")
             {
                 if(!wordHasDigits(getWord(i)))
                 {
+                    //Si le mot courrant n'est pas dans le dictionnaire, on essaie les variantes possibles d'erreurs
                     if(!dictionary->find(getWord(i)))
                     {
-                        //std::cout<<"*"<<getWord(i)<<std::endl;
-
                         file<<"*"<<getWord(i)<<std::endl;
-                        //generer et rechercher les variantes possibles
+                        //gééerer et rechercher les variantes possibles.On les ajoute dans le fichier de sortie s'il
+                        //y a des variantes possibles
                         std::vector<std::string>  variants = missOneLetter(getWord(i));
                         for(int i = 0; i <variants.size(); i++)
                         {
@@ -207,6 +259,7 @@ class SpellChecker
             }            
         }
 
+        //Vérification du temps nécessaire à la correction et affichage dans le terminal
         std::chrono::high_resolution_clock::time_point t2 =  std::chrono::high_resolution_clock::now();
         std::chrono::duration<double> time_span  = std::chrono::duration_cast<std::chrono::duration<double>>(t2-t1);
         std::cout<<"Correcting took "<<time_span.count()<<" seconds"<<std::endl; 

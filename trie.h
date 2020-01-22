@@ -1,3 +1,6 @@
+/**
+* Auteurs : Teo Ferrari, Emmanuel Janssens et Mathias Maillard
+*/
 #ifndef TRIE_H
 #define TRIE_H
 
@@ -5,8 +8,6 @@
 
 /**
  * Classe représentant un ternary search tree
- *
- * Auteurs : Teo Ferrari, Emmanuel Janssens et Mathias Maillard
  */
 template<class valueType>
 class Trie {

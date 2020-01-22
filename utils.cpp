@@ -1,3 +1,7 @@
+/**
+ * Auteurs: Teo Ferrari, Emmanuel Janssens et Mathias Maillard
+ */
+
 #include "utils.h"
 #include <algorithm>
 #include <cctype>
@@ -33,6 +37,7 @@ void removeNonChar(string & str)
 } 
 bool isNotAlpha(char c)
 {
+    //Le caractère doit être soit un caractère alphanumérique, soit une apostrophe, soit un espace
     if(!isalpha(c) && !isdigit(c) && c != '\'' && c != ' ')
     {
         return true;
