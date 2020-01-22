@@ -69,16 +69,16 @@ int main()
 {
 
 
-    SpellChecker<StlDataStruct<unordered_set<string,Hash>,string>> test("data/dictionary.txt","data/input_sh","txt");
+//    SpellChecker<StlDataStruct<unordered_set<string,Hash>,string>> test("data/dictionary.txt","data/input_sh","txt");
+//
+//    test.load_dictrionary();
+//    test.correct();
 
-    test.load_dictrionary();
-    test.correct();
-
-    /*SpellChecker<Trie<string>> spell("data/dictionary.txt","data/input_sh","txt");
+    SpellChecker<Trie<string>> spell("data/dictionary.txt","data/input_lates","txt");
 
     spell.load_dictrionary();
 
-    spell.correct();*/
+    spell.correct();
    
     return 0;
 

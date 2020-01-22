@@ -3,122 +3,113 @@
 
 #include "utils.h"
 
+/**
+ * Classe représentant un ternary search tree
+ *
+ * Auteurs : Teo Ferrari, Emmanuel Janssens et Mathias Maillard
+ */
 template<class valueType>
-class Trie{
+class Trie {
 
-	struct Node  {
+	/**
+	 * Structure node contenant un lien vers chaque enfant si il exister,
+	 * un caractère et un boolean indiquant si le node est la fin d'un mot
+	 */
+	struct Node {
 		struct Node *left, *right, *middle;
 		char character;
 		bool end;
-		Node()
-		{ 
+		Node() {
 			left = nullptr;
-			right = nullptr; 
+			right = nullptr;
 			middle = nullptr;
-			end = false; 
+			end = false;
+			character = '\0';
 		}
 	};
-	
+
 	Node *_root;
 
-	Node *get(Node *x, const valueType& word, int pos) {
-		if (x == nullptr) {
+	/**
+	 * Récupère le dernier node d'un mot et le retourne
+	 */
+	Node* get(Node *x, const valueType &word, unsigned pos) {
+		if (x == nullptr) { //si le sous arbre est vide ne retourn rien
 			return nullptr;
 		}
 		char c = word[pos];
-		if (c < x->character) {
+		if (c < x->character) { // continue a gauche
 			return get(x->left, word, pos);
-		}
-		else if (c > x->character) {
+		} else if (c > x->character) { // continue a droite
 			return get(x->right, word, pos);
-		}
-		else if (pos < word.length() - 1) {
+		} else if (pos < word.length() - 1) { //continue au milieu et passe a la lettre suivante du mot
 			return get(x->middle, word, pos + 1);
-		}
-		else {
-			return x;
+		} else {
+			return x; // si la lettre est la dernière du mot et est égale a la lettre du node, le retourne
 		}
 
 	}
 
-	Node *put(Node *x,  const valueType& word, int pos) {
+	/**
+	 * Insère un mot dans l'arbre
+	 */
+	Node* put(Node *x, const valueType &word, unsigned pos) {
 
 		char c = word[pos];
-		if (x == nullptr) {
+		if (x == nullptr) { //si le node est vide crée un nouveau node avec la lettre du mot
 			x = new Node();
 			x->character = c;
 			x->end = false;
 		}
 
-		if (c < x->character) {
+		if (c < x->character) { //continue a gauche
 			x->left = put(x->left, word, pos);
-		}
-		else if (c > x->character) {
+		} else if (c > x->character) { //continue a droite
 			x->right = put(x->right, word, pos);
-		}
-		else if (pos < word.length() - 1) {
+		} else if (pos < word.length() - 1) { // continue au milieu
 			x->middle = put(x->middle, word, pos + 1);
+		} else {
+			x->end = true; //si derniere lettre du mot met le flag end a true dans le node
 		}
-		else {
-			x->end = true;
-		}
-			return x;
-
-	}
-
-
-	Node* remove(Node *x, const valueType& word, int pos)
-	{
-		/*if(x == nullptr)
-		{
-			return nullptr;
-		}
-
-		if(pos == word.size())
-		{
-			if(x->end)
-			{
-				x->end = false;
-			}
-			if(isEmpty(x))
-			{
-				delete x;
-				x = nullptr;
-			}
-			return x;
-		}*/
-
 		return x;
+
 	}
 public:
 
+	/**
+	 * Constructeur
+	 */
 	Trie() {
 		_root = nullptr;
 	}
+	/**
+	 * Destructeur
+	 */
 	~Trie() {
 	}
 
-	bool get( const valueType& word) 
-	 {
-		Node* x = get(_root, word, 0);
+	/**
+	 * Cherche si un mot est contenu dans le TST
+	 * Utilises la fonction get privée
+	 */
+	bool get(const valueType &word) {
+		Node *x = get(_root, word, 0);
 		if (x == nullptr) {
 			return false;
 		}
 		if (x->end == true) {
 			return true;
-		}
-		else {
+		} else {
 			return false;
 		}
 	}
 
-	void put( const valueType& word)  {
+	/**
+	 * Ajoute un mot au TST
+	 * Utilises la fonction put privée
+	 */
+	void put(const valueType &word) {
 		_root = put(_root, word, 0);
-	}
-
-	void remove(const valueType& word) 
-	{
-		_root = remove(_root,word,0);
 	}
 };
 
