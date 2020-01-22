@@ -58,7 +58,7 @@ class SpellChecker
     /**
      * Méthode permettant d'initialiser le dictionnaire
      */
-    void load_dictrionary()
+    void load_dictionary()
     {
         dictionary->load();
     }    

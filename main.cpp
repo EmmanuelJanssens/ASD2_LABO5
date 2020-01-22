@@ -43,13 +43,13 @@ int main()
      * dictionnaire
      */
     SpellChecker<StlDataStruct<unordered_set<string,Hash>,string>> spell("data/dictionary.txt","data/input_sh","txt");
-    spell.load_dictrionary();
+    spell.load_dictionary();
     spell.correct();
 
     /*
      * En utilisant un TST
     SpellChecker<Trie<string>> spell("data/dictionary.txt","data/input_lates","txt");
-    spell.load_dictrionary();
+    spell.load_dictionary();
     spell.correct(); */
    
     return 0;
